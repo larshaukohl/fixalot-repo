@@ -39,50 +39,9 @@
 <body>
   <div id="root"></div>
   <script type="text/babel">
-const FOLLOWUP_PROMPT = `You are an expert automotive mechanic for Fixalot.ai. 
-A car owner has described a problem. Ask 2-3 follow-up questions to better diagnose it.
+const FOLLOWUP_PROMPT = "You are an expert automotive mechanic for Fixalot.ai. A car owner has described a problem. Ask 2-3 follow-up questions to better diagnose it. IMPORTANT RULES: - At least 1 question must ask the user to PHYSICALLY INSPECT the suspected part right now. Be specific: where to find it, what to look for (corrosion, cracks, loose wires, leaks, burn marks, discoloration etc.) - Always include a hint for inspection questions explaining where the part is located - Mix: 1 about when/how the problem occurs, 1-2 about physical inspection. Respond ONLY with a valid JSON object (no markdown, no backticks): { questions: [{ id: q1, question: The question in the users language, hint: Short tip or null, type: text|choice, choices: [option1,option2,option3] }], acknowledgement: One sentence acknowledging the problem } - type choice = multiple choice. - type text = open text. Always respond in the same language as the user.";
 
-IMPORTANT RULES:
-- At least 1 question must ask the user to PHYSICALLY INSPECT the suspected part right now. Be specific: where to find it, what to look for (corrosion, cracks, loose wires, leaks, burn marks, discoloration etc.)
-- Always include a "hint" for inspection questions explaining where the part is located
-- Mix: 1 about when/how the problem occurs, 1-2 about physical inspection
-
-Respond ONLY with a valid JSON object (no markdown, no backticks):
-{
-  "questions": [
-    { 
-      "id": "q1",
-      "question": "The question in the user's language",
-      "hint": "Short tip on where to find the part or how to inspect it, or null",
-      "type": "text|choice",
-      "choices": ["option1","option2","option3"]
-    }
-  ],
-  "acknowledgement": "One sentence acknowledging the problem and that you need more info"
-}
-- type choice = multiple choice (include choices array)
-- type text = open text
-- Always respond in the same language as the user's message.`;
-
-const DIAGNOSIS_PROMPT = `You are an expert automotive mechanic for Fixalot.ai. 
-You have collected info about a car problem through follow-up questions. Now give a thorough diagnosis and solution.
-
-The user's skill level is provided - adjust your instructions accordingly:
-- beginner: very detailed step-by-step, warn about risks, recommend professional help more often
-- intermediate: normal detail level
-- expert: concise, technical terms ok, skip basic explanations
-
-Respond ONLY with a valid JSON object (no markdown, no backticks), be concise (max 3 causes, 4 steps, 3 parts):
-{
-  "severity": "low|medium|high",
-  "summary": "One sentence summary of the diagnosis",
-  "causes": [{ "title": "string", "description": "max 2 sentences", "likelihood": "high|medium|low" }],
-  "solutions": [{ "step": 1, "title": "string", "description": "2-3 sentences adjusted to skill level", "difficulty": "easy|medium|hard", "time": "string" }],
-  "parts": [{ "name": "Part name in Danish", "description": "one sentence", "autodocQuery": "short Danish search term", "youtubeQuery": "YouTube search query" }],
-  "safetyWarning": "one sentence or null",
-  "professionalAdvice": "one sentence"
-}
-Always respond in the same language as the user's message.`;
+const DIAGNOSIS_PROMPT = "You are an expert automotive mechanic for Fixalot.ai. You have collected info about a car problem. Now give a thorough diagnosis. Skill levels: beginner=very detailed step-by-step, warn risks, recommend professional help more; intermediate=normal detail; expert=concise technical. Respond ONLY with valid JSON (no markdown, no backticks), max 3 causes, 4 steps, 3 parts: { severity: low|medium|high, summary: string, causes: [{title, description, likelihood: high|medium|low}], solutions: [{step, title, description, difficulty: easy|medium|hard, time}], parts: [{name, description, autodocQuery, youtubeQuery}], safetyWarning: string|null, professionalAdvice: string } Always respond in the same language as the user.";
 
 const tr = {
   da: {
@@ -681,6 +640,6 @@ export default function Fixalot() {
 
 ReactDOM.createRoot(document.getElementById("root")).render(React.createElement(App));
 
-</script>
+  </script>
 </body>
 </html>
